@@ -15,6 +15,7 @@ pygame.display.set_caption('Pong')
 ball_center = (300, 200)
 velocity = (-1, 1)
 left_paddle_coords = (50, 175)
+right_paddle_coords = (540, 175)
 
 def draw_the_ball(window, ball_center):
     window.fill((0, 0, 0))
@@ -22,8 +23,9 @@ def draw_the_ball(window, ball_center):
 
 def draw_paddles(window):
     x, y = left_paddle_coords
-    pygame.draw.rect(window, (0,255,0), (x, y,10,50) ,0)
-    pygame.draw.rect(window, (0,255,0), (WIDTH - 60, HEIGHT/2 -25 ,10,50) ,0)
+    a, b = right_paddle_coords
+    pygame.draw.rect(window, (0,255,0), (x, y, 10,50) ,0)
+    pygame.draw.rect(window, (0,255,0), (a, b ,10,50) ,0)
 
 def new_ball_center():
     (x, y) = ball_center
@@ -39,10 +41,11 @@ def detect_collision(ball_center):
         dy = dy*-1
     return (dx, dy)
 
-def move_left_paddle(direction):
-    x, y = left_paddle_coords
+def move_paddle(coords,direction):
+    x, y = coords
     if direction == UP:
-        y = y - 1
+        if y != 0:
+            y = y - 1
     elif direction == DOWN:
         y = y + 1
     return (x, y)
@@ -53,11 +56,14 @@ while True:
     ball_center, velocity = new_ball_center()
     pygame.display.update()
     for event in pygame.event.get():
-        if event.type == KEYDOWN:
-            print(event.key)
-            if event.key == K_w:
-                print("I'm working")
-                left_paddle_coords = move_left_paddle(UP)
-            elif event.key == K_s:
-                left_paddle_coords = move_left_paddle(DOWN)
+        pass
+    pressed = pygame.key.get_pressed()
+    if pressed[K_w]:
+        left_paddle_coords = move_paddle(left_paddle_coords,UP)
+    elif pressed[K_s]:
+        left_paddle_coords = move_paddle(left_paddle_coords,DOWN)
+    if pressed[K_UP]:
+        right_paddle_coords = move_paddle(right_paddle_coords,UP)
+    elif pressed[K_DOWN]:
+        right_paddle_coords = move_paddle(right_paddle_coords,DOWN)
     clock.tick(60)
