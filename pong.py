@@ -47,8 +47,12 @@ def move_paddle(coords,direction):
         if y != 0:
             y = y - 1
     elif direction == DOWN:
-        y = y + 1
+        if y != HEIGHT - 50:
+            y = y + 1
     return (x, y)
+
+def detect_hit(paddle_coords):
+    pass
 
 while True:
     draw_the_ball(window, ball_center)
